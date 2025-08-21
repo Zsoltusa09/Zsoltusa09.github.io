@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teszt Weboldal • Minta</title>
+  <meta name="description" content="Egyszerű, modern, reszponzív teszt weboldal – egy fájlban (HTML, CSS, JS)." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚡️</text></svg>">
+  <style>
+    /* --- Alap stílusok és változók --- */
+    :root{
+      --bg: #0b0c10;
+      --card: #111217;
+      --text: #e8e8ea;
+      --muted: #b8b8bf;
+      --primary: #4f46e5;
+      --primary-2: #7c3aed;
+      --ring: #22d3ee;
+      --shadow: 0 10px 25px rgba(0,0,0,.35);
+      --radius: 18px;
+      --maxw: 1100px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, Noto Sans, 'Apple Color Emoji','Segoe UI Emoji';
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(124,58,237,.15), transparent 60%),
+                  radial-gradient(1000px 500px at 10% -5%, rgba(79,70,229,.2), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width:var(--maxw); margin-inline:auto; padding: clamp(16px, 3vw, 28px)}
+    .btn{
+      display:inline-flex; align-items:center; gap:.6rem; cursor:pointer;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color:white; border:none; padding:.85rem 1.1rem; border-radius: 999px; font-weight:600;
+      box-shadow: var(--shadow); transition: transform .12s ease, filter .2s ease;
+    }
+    .btn:hover{ transform: translateY(-2px); filter: brightness(1.05); }
+    .btn:focus{ outline: 2px solid var(--ring); outline-offset: 2px }
+
+    /* --- Fejléc --- */
+    header{ position:sticky; top:0; z-index:10; backdrop-filter: saturate(140%) blur(6px); background: rgba(11,12,16,.55); border-bottom:1px solid rgba(255,255,255,.06) }
+    .nav{ display:flex; align-items:center; justify-content:space-between }
+    .brand{ display:flex; align-items:center; gap:.7rem; font-weight:800; letter-spacing:.2px }
+    .brand .logo{ width:34px; height:34px; display:grid; place-items:center; border-radius:10px; background:linear-gradient(135deg, var(--primary), var(--primary-2)); box-shadow:var(--shadow) }
+    .brand .logo span{ font-size:20px }
+    .menu{ display:flex; gap:1rem; align-items:center }
+    .menu a{ padding:.6rem .8rem; border-radius:10px; color:var(--muted) }
+    .menu a:hover{ color:var(--text); background: rgba(255,255,255,.04) }
+
+    /* --- Hős szekció --- */
+    .hero{ display:grid; gap:2rem; align-items:center; grid-template-columns: 1.1fr .9fr; padding-top: min(8vh, 60px); }
+    .hero h1{ font-size: clamp(32px, 5.2vw, 58px); line-height:1.05; margin:0 }
+    .hero p{ color:var(--muted); font-size: clamp(16px, 1.6vw, 20px) }
+    .hero .cta{ display:flex; gap:.9rem; flex-wrap:wrap; margin-top:1rem }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.06); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .preview{
+      aspect-ratio: 16/10; display:grid; place-items:center; position:relative; overflow:hidden
+    }
+    .preview .blob{ position:absolute; width:240px; height:240px; background: radial-gradient(circle at 30% 30%, rgba(34,211,238,.9), transparent 60%); filter: blur(20px); left: -50px; top:-40px; opacity:.45; }
+    .preview .grid{ position:absolute; inset:0; background: linear-gradient( to right, rgba(255,255,255,.05) 1px, transparent 1px ) 0 0 / 24px 100%, linear-gradient( to bottom, rgba(255,255,255,.05) 1px, transparent 1px ) 0 0 / 100% 24px }
+    .preview .mock{ position:relative; z-index:1; padding:18px; width:92%; border-radius:14px; background:#0f1117; border:1px solid rgba(255,255,255,.08); box-shadow: var(--shadow) }
+    .tag{ display:inline-flex; align-items:center; gap:.5rem; padding:.35rem .6rem; border-radius:999px; background:rgba(124,58,237,.15); border:1px solid rgba(124,58,237,.35); color:#d6ccff; font-size:.85rem }
+
+    /* --- Fő tartalom --- */
+    section{ margin-top: clamp(40px, 6vw, 80px) }
+    .grid3{ display:grid; gap:1rem; grid-template-columns: repeat(3, minmax(0,1fr)) }
+    .feat{ padding:1.1rem }
+    .feat h3{ margin:.2rem 0 .4rem; font-size:1.1rem }
+    .feat p{ color:var(--muted) }
+
+    /* --- CTA kártya --- */
+    .cta-card{ display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1.2rem 1.3rem }
+    .cta-card p{ margin:0; color:var(--muted) }
+
+    /* --- Lábléc --- */
+    footer{ margin-top:60px; padding:30px 0; color:var(--muted); border-top:1px solid rgba(255,255,255,.06) }
+
+    /* --- Űrlap --- */
+    form{ display:grid; gap:.8rem; max-width:520px }
+    input, textarea{
+      width:100%; background:#0f1016; border:1px solid rgba(255,255,255,.08); color:var(--text);
+      border-radius:12px; padding:.85rem 1rem; font: inherit; outline: none; transition:border-color .15s ease
+    }
+    input:focus, textarea:focus{ border-color: var(--ring) }
+    .hint{ color:var(--muted); font-size:.9rem }
+    .ok{ color:#22c55e }
+    .err{ color:#ef4444 }
+
+    /* --- Reszponzivitás --- */
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px){
+      .grid3{ grid-template-columns: 1fr }
+      .cta-card{ flex-direction:column; align-items:flex-start }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="Ugrás a kezdőlapra">
+        <div class="logo" aria-hidden="true"><span>⚡️</span></div>
+        <span>Teszt Weboldal</span>
+      </a>
+      <nav class="menu" aria-label="Főmenü">
+        <a href="#funkciok">Funkciók</a>
+        <a href="#urlap">Kapcsolat</a>
+        <button class="btn" id="themeBtn" type="button" aria-pressed="false" title="Téma váltása (világos/sötét)">Téma váltás</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="container">
+    <section class="hero">
+      <div>
+        <span class="tag">Új • 2025</span>
+        <h1>Modern, reszponzív <br> teszt weboldal</h1>
+        <p>Ez egy egyfile-os minta-projekt. Tiszta HTML, CSS és egy kevés JS – gyors prototípusokhoz, bemutatókhoz vagy tanuláshoz.</p>
+        <div class="cta">
+          <a class="btn" href="#urlap">Kérek demót</a>
+          <a class="btn" href="#funkciok" style="background:transparent; border:1px solid rgba(255,255,255,.18); color:var(--text); box-shadow:none">Tudj meg többet</a>
+        </div>
+      </div>
+      <div class="card preview" role="img" aria-label="Előnézeti kártya dekoratív elemekkel">
+        <div class="blob" aria-hidden="true"></div>
+        <div class="grid" aria-hidden="true"></div>
+        <div class="mock" aria-hidden="true">
+          <pre style="margin:0; white-space:pre-wrap"><code>// Gyors indítás
+&lt;link rel="stylesheet" href="style.css"&gt;
+&lt;script defer src="app.js"&gt;&lt;/script&gt;
+
+// UI komponensek
+&lt;button class="btn"&gt;Művelet&lt;/button&gt;
+
+// Tipp: módosítsd a színeket a :root változókban!</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="funkciok">
+      <h2>Mit tartalmaz?</h2>
+      <div class="grid3">
+        <article class="card feat">
+          <h3>Gyors és egyszerű</h3>
+          <p>Nincs build lépés. Töltsd le ezt a fájlt, nyisd meg a böngészőben, és kész!</p>
+        </article>
+        <article class="card feat">
+          <h3>Modern megjelenés</h3>
+          <p>Lágy árnyékok, kerekített sarkok, letisztult tipó – azonnal használható dizájn.</p>
+        </article>
+        <article class="card feat">
+          <h3>Apró interakciók</h3>
+          <p>Sötét/világos téma váltás, egyszerű űrlapvalidáció és fókusz állapotok.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card cta-card" aria-labelledby="cta-title">
+      <div>
+        <h3 id="cta-title" style="margin:.2rem 0 .4rem">Készen állsz kipróbálni?</h3>
+        <p>Görgess le és küldd el az űrlapot – pár másodperc alatt kapsz visszajelzést.</p>
+      </div>
+      <a class="btn" href="#urlap">Ugrás az űrlaphoz</a>
+    </section>
+
+    <section id="urlap">
+      <h2>Kapcsolati űrlap</h2>
+      <form novalidate>
+        <label>
+          Név
+          <input type="text" name="name" placeholder="Pl. Kovács Anna" required minlength="3" />
+        </label>
+        <label>
+          E-mail
+          <input type="email" name="email" placeholder="te@pelda.hu" required />
+        </label>
+        <label>
+          Üzenet
+          <textarea name="message" rows="4" placeholder="Miben segíthetek?" required minlength="10"></textarea>
+        </label>
+        <button class="btn" type="submit">Küldés</button>
+        <div class="hint" id="formHint" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="container">
+    <small>© <span id="year"></span> Teszt Weboldal • Készült: HTML + CSS + JS</small>
+  </footer>
+
+  <script>
+    // Évszám
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Téma váltás (light/dark)
+    const themeBtn = document.getElementById('themeBtn');
+    const STORAGE_KEY = 'demo-theme';
+    const setTheme = (mode) => {
+      document.documentElement.dataset.theme = mode;
+      themeBtn.setAttribute('aria-pressed', mode === 'light');
+      localStorage.setItem(STORAGE_KEY, mode);
+    };
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if(saved){ setTheme(saved); }
+    themeBtn.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      setTheme(next);
+    });
+
+    // Light mód stílus finomhangolás
+    const style = document.createElement('style');
+    style.textContent = `
+      :root[data-theme="light"]{ --bg:#f7f7fb; --card:#ffffff; --text:#111218; --muted:#5a5f6e; --shadow:0 8px 20px rgba(0,0,0,.08) }
+      :root[data-theme="light"] body{ background: radial-gradient(1200px 600px at 80% -10%, rgba(124,58,237,.08), transparent 60%),
+                  radial-gradient(1000px 500px at 10% -5%, rgba(79,70,229,.08), transparent 60%), var(--bg); }
+      :root[data-theme="light"] .menu a:hover{ background: rgba(0,0,0,.04) }
+      :root[data-theme="light"] .preview .mock{ background:#ffffff; }
+    `;
+    document.head.appendChild(style);
+
+    // Egyszerű űrlap validáció (front-end demo)
+    const form = document.querySelector('form');
+    const hint = document.getElementById('formHint');
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = (data.get('name')||'').trim();
+      const email = (data.get('email')||'').trim();
+      const message = (data.get('message')||'').trim();
+
+      // Alap ellenőrzések
+      if(name.length < 3){ hint.innerHTML = '<span class="err">A név legyen legalább 3 karakter.</span>'; return; }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ hint.innerHTML = '<span class="err">Adj meg érvényes e-mail címet.</span>'; return; }
+      if(message.length < 10){ hint.innerHTML = '<span class="err">Az üzenet legyen legalább 10 karakter.</span>'; return; }
+
+      // Siker üzenet (backend nélkül demo)
+      hint.innerHTML = '<span class="ok">Köszönöm! Üzenetedet fogadtuk (demo). Hamarosan jelentkezünk.</span>';
+      form.reset();
+    });
+  </script>
+</body>
+</html>
